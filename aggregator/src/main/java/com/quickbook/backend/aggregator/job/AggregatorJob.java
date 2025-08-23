@@ -9,6 +9,7 @@ import com.quickbook.backend.aggregator.service.OpsService;
 import com.quickbook.backend.aggregator.utils.AggregatorUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,6 +34,7 @@ public class AggregatorJob {
     private final OpsRepo opsRepo;
     private final OpsService opsService;
     private final AggregatorUtil aggregatorUtil;
+    private final Integer documentRefreshRate;
 
     public AggregatorJob(
             @Autowired
@@ -42,11 +44,14 @@ public class AggregatorJob {
             @Autowired
             OpsService opsService,
             @Autowired
-            AggregatorUtil aggregatorUtil) {
+            AggregatorUtil aggregatorUtil,
+            @Value("${document.refresh.rate}")
+            Integer documentRefreshRate) {
         this.sessionDocumentRepo = sessionDocumentRepo;
         this.opsRepo = opsRepo;
         this.opsService = opsService;
         this.aggregatorUtil = aggregatorUtil;
+        this.documentRefreshRate = documentRefreshRate;
         this.queue = new LinkedBlockingQueue<>();
     }
 
